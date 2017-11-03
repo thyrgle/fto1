@@ -31,12 +31,10 @@ var fsm = new StateMachine({
 
 $('document').ready(function() {
     $("#remove1").on('click', function() {
-        console.log("HERE");
         fsm.playerMove(1);
     });
 
     $("#remove2").click(function() {
-        console.log("Here");
         fsm.playerMove(2);
     });
     window.setInterval(function() {
