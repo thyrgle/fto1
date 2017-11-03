@@ -1,0 +1,22 @@
+{
+	"0": {
+		"value": "LOSS",
+		"remoteness": 0
+	},
+	"1": {
+		"value": "WIN",
+		"remoteness": 1
+	},
+	"2": {
+		"value": "WIN",
+		"remoteness": 1
+	},
+	"3": {
+		"value": "LOSS",
+		"remoteness": 2
+	},
+	"4": {
+		"value": "WIN",
+		"remoteness": 3
+	}
+}
