@@ -7,10 +7,17 @@ api = hug.API(__name__)
 api.http.add_middleware(CORSMiddleware(api))
 
 def do_move(pos, mov):
+    """
+    Given a particular position perform a move in four to one.
+    Note: Assumes validity of move.
+    """
     return pos - mov
 
 
 def gen_moves(pos):
+    """
+    Generate every possible move given a position in the game four to one.
+    """
     if pos == 1:
         return [1]
     elif pos == 0:
@@ -18,6 +25,10 @@ def gen_moves(pos):
     else:
         return [1, 2]
 
+# -------------------------------------------------------------------
+# Collection of functions to update state of the best position found.
+# old is the previous best state data, new is the challenger.
+# -------------------------------------------------------------------
 
 def loss_loss(old, new):
     return new
@@ -31,6 +42,10 @@ def win_loss(old, new):
 def no_op(old, new):
     return old
 
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
 STATES = {
     "LOSS" : { "LOSS" : loss_loss, "WIN" : loss_win },
     "WIN"  : { "LOSS" : win_loss,  "WIN" : no_op },
@@ -38,6 +53,11 @@ STATES = {
 
 @hug.get('/')
 def next_best_move(pos: hug.types.number):
+    """
+    Given a position, returns the next best move that someone should play
+    Arguments:
+    pos -- The current position of the board.
+    """
     moves = gen_moves(pos)
     with open('fto1.json') as raw_data:
         data = json.loads(raw_data.read())

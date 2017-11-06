@@ -1,4 +1,7 @@
-var fsm = new StateMachine({
+/**
+ * A representation of the game four to one that 
+ */
+var game = new StateMachine({
     init: 'playerTurn',
     transitions: [
         { name: 'playerMove', from: 'playerTurn', to: 'computerTurn' },
@@ -30,14 +33,25 @@ var fsm = new StateMachine({
 });
 
 $('document').ready(function() {
+    /**
+     * Remove one "stone" from the board.
+     */
     $("#remove1").on('click', function() {
-        fsm.playerMove(1);
+        game.playerMove(1);
     });
 
+    /**
+     * Remove two "stones" from the board.
+     */
     $("#remove2").click(function() {
-        fsm.playerMove(2);
+        game.playerMove(2);
     });
+
+    /**
+     * Check for updates in the state, used to determine if the computer can m-
+     * ake a move.
+     */
     window.setInterval(function() {
-        fsm.computerMove();
+        game.computerMove();
     }, 2000);
 });
