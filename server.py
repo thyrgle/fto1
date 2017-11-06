@@ -19,6 +19,23 @@ def gen_moves(pos):
         return [1, 2]
 
 
+def loss_loss(old, new):
+    return new
+
+def loss_win(old, new):
+    return old[0], max(old[1], new[1])
+
+def win_loss(old, new):
+    return old[0], min(old[1], new[1])
+
+def no_op(old, new):
+    return old
+
+STATES = {
+    "LOSS" : { "LOSS" : loss_loss, "WIN" : loss_win },
+    "WIN"  : { "LOSS" : win_loss,  "WIN" : no_op },
+}
+
 @hug.get('/')
 def next_best_move(pos: hug.types.number):
     moves = gen_moves(pos)
@@ -28,16 +45,10 @@ def next_best_move(pos: hug.types.number):
         best_stats = [data[str(do_move(pos, moves[0]))]['value'],
                       data[str(do_move(pos, moves[0]))]['remoteness']]
         for move in moves:
-            if best_stats[0] == "LOSS" and data[str(do_move(pos, move))]['value'] == "LOSS":
-                best_stats = (data[str(do_move(pos, move))]['value'], data[str(do_move(pos, move))]['remoteness'])
+            move_stats = (data[str(do_move(pos, move))]['value'],
+                          data[str(do_move(pos, move))]['remoteness'])
+            old_best_stats = best_stats
+            best_stats = STATES[best_stats[0]][move_stats[0]](best_stats, move_stats)
+            if best_stats != old_best_stats:
                 best = move
-            elif best_stats[0] == "LOSS" and data[str(do_move(pos, move))]['value'] == "WIN":
-                if best_stats[1] < data[str(do_move(pos, move))]['remoteness']:
-                    best_stats[1] = data[str(do_move(pos, move))]['remoteness']
-                    best = move
-            elif best_stats[0] == "WIN" and data[str(do_move(pos, move))]['value'] == "LOSS":
-                if best_stats[1] > data[str(do_move(pos, move))]['remoteness']:
-                    best_stats[1] = data[str(do_move(pos, move))]['remoteness']
-                    best = move
         return best
-
