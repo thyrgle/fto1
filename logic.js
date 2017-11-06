@@ -15,7 +15,11 @@ var game = new StateMachine({
     methods: {
         onPlayerMove: function(lifecycle, amount) {
             this.board -= amount;
-            $("#board span").text(this.board);
+            if (this.board <= 0) {
+                $("#board span").text("Game over");
+            } else {
+                $("#board span").text(this.board);
+            }
         },
         onComputerMove: function() {
             self = this;
@@ -26,7 +30,11 @@ var game = new StateMachine({
                 data: {pos: self.board },
             }).done(function (resp) {
                 self.board -= resp;
-                $("#board span").text(self.board);
+                if (self.board <= 0) {
+                    $("#board span").text("Game over");
+                } else {
+                    $("#board span").text(self.board);
+                }
             });
         },
     },
