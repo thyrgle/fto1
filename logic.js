@@ -15,13 +15,17 @@ var game = new StateMachine({
     },
 
     methods: {
-        onPlayerMove: function(lifecycle, amount) {
+        updateBoardByAmount: function(amount) {
             this.board -= amount;
             if (this.board <= 0) {
                 boardView.text("Game over");
             } else {
                 boardView.text(this.board);
             }
+        },
+
+        onPlayerMove: function(lifecycle, amount) {
+            this.updateBoardByAmount(amount);
         },
         onComputerMove: function() {
             self = this;
@@ -30,14 +34,7 @@ var game = new StateMachine({
                 url: "http://127.0.0.1:8000/",
                 dataType: 'json',
                 data: {pos: self.board },
-            }).done(function (resp) {
-                self.board -= resp;
-                if (self.board <= 0) {
-                    boardView.text("Game over");
-                } else {
-                    boardView.text(self.board);
-                }
-            });
+            }).done(this.updateBoardByAmount.bind(this));
         },
     },
 });
