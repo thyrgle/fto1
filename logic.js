@@ -1,3 +1,5 @@
+var boardView;
+
 /**
  * A representation of the game four to one that 
  */
@@ -16,9 +18,9 @@ var game = new StateMachine({
         onPlayerMove: function(lifecycle, amount) {
             this.board -= amount;
             if (this.board <= 0) {
-                $("#board span").text("Game over");
+                boardView.text("Game over");
             } else {
-                $("#board span").text(this.board);
+                boardView.text(this.board);
             }
         },
         onComputerMove: function() {
@@ -31,9 +33,9 @@ var game = new StateMachine({
             }).done(function (resp) {
                 self.board -= resp;
                 if (self.board <= 0) {
-                    $("#board span").text("Game over");
+                    boardView.text("Game over");
                 } else {
-                    $("#board span").text(self.board);
+                    boardView.text(self.board);
                 }
             });
         },
@@ -41,6 +43,7 @@ var game = new StateMachine({
 });
 
 $(function() {
+    boardView = $("#board span");
     /**
      * Remove one "stone" from the board.
      */
