@@ -40,7 +40,7 @@ var game = new StateMachine({
     },
 });
 
-$('document').ready(function() {
+$(function() {
     /**
      * Remove one "stone" from the board.
      */
